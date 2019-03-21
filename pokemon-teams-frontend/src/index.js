@@ -8,6 +8,30 @@ document.addEventListener('DOMContentLoaded', () => {
   let trainers = []
   console.log(trainerContainer)
 
+  trainerContainer.addEventListener('click', (event) => {
+    // console.log(event.target)
+    // debugger
+    // let's try to release that pokemon to the wild aka DELETE
+    if (event.target.className === "release") {
+      // debugger
+      // here before the fetch or talking to our mailman
+      // we do our behavoir
+      // behavior right now is deleting or removing the particular pokemon
+
+
+      const config = {
+        method: "DELETE"
+      }
+
+      fetch(`${POKEMONS_URL}/${event.target.dataset.pokemonId}`, config)
+        .then(response => response.json())
+        .then(data => {
+          event.target.parentElement.remove()
+          console.log(data)
+        })
+    }
+  })
+
   const getTrainersAndRenderAndAddEventListenersAndEtc = () => {
     trainerContainer.innerHTML = ''
 
@@ -40,8 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // POST /pokemons
 
             // console.log('trainer id', trainer.id);
-
-            fetch(POKEMONS_URL, {
+            const config = {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -49,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
               body: JSON.stringify({
                  trainer_id: trainer.id
               })
-            })
+            }
+
+            fetch(POKEMONS_URL, config)
               .then(response => response.json())
               .then(data => {
                 console.log(data)
